@@ -1,0 +1,683 @@
+<!DOCTYPE html>
+<html lang="en" class="scroll-smooth">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Alaa Fawzy Mahmoud Adam - Interactive CV</title>
+    
+    <!-- Tailwind CSS -->
+    <script src="https://cdn.tailwindcss.com"></script>
+    
+    <!-- FontAwesome -->
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+    
+    <!-- Google Fonts -->
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700&family=Poppins:wght@400;500;600;700&display=swap" rel="stylesheet">
+    
+    <script>
+        tailwind.config = {
+            darkMode: 'class',
+            theme: {
+                extend: {
+                    fontFamily: {
+                        sans: ['Inter', 'sans-serif'],
+                        heading: ['Poppins', 'sans-serif'],
+                    },
+                    colors: {
+                        primary: '#3b82f6', // blue-500
+                        secondary: '#1e40af', // blue-800
+                        darkBg: '#0f172a', // slate-900
+                        darkCard: '#1e293b', // slate-800
+                    }
+                }
+            }
+        }
+    </script>
+    
+    <style>
+        /* Custom Styles & Animations */
+        body {
+            font-family: 'Inter', sans-serif;
+            transition: background-color 0.3s, color 0.3s;
+        }
+        h1, h2, h3, h4, h5, h6 {
+            font-family: 'Poppins', sans-serif;
+        }
+        
+        .timeline-dot {
+            transition: all 0.3s ease;
+        }
+        .timeline-item:hover .timeline-dot {
+            transform: scale(1.3);
+            background-color: #3b82f6;
+            box-shadow: 0 0 15px rgba(59, 130, 246, 0.5);
+        }
+
+        .skill-pill {
+            transition: all 0.3s ease;
+        }
+        .skill-pill:hover {
+            transform: translateY(-3px);
+            box-shadow: 0 4px 12px rgba(59, 130, 246, 0.3);
+            border-color: #3b82f6;
+        }
+
+        .fade-in-section {
+            opacity: 0;
+            transform: translateY(20px);
+            visibility: hidden;
+            transition: opacity 0.6s ease-out, transform 0.6s ease-out;
+            will-change: opacity, visibility;
+        }
+        .fade-in-section.is-visible {
+            opacity: 1;
+            transform: none;
+            visibility: visible;
+        }
+
+        /* Typing cursor */
+        .typing-cursor::after {
+            content: '|';
+            animation: blink 1s step-start infinite;
+        }
+        @keyframes blink {
+            50% { opacity: 0; }
+        }
+
+        /* Print styles for PDF export */
+        @media print {
+            body { background: white; color: black; }
+            .no-print { display: none !important; }
+            .print-break { page-break-before: always; }
+            .shadow-lg, .shadow-xl { box-shadow: none !important; border: 1px solid #e5e7eb; }
+            * { transition: none !important; animation: none !important; }
+        }
+    </style>
+</head>
+<body class="bg-gray-50 text-gray-800 dark:bg-darkBg dark:text-gray-200 antialiased selection:bg-primary selection:text-white">
+
+    <nav class="fixed w-full z-50 bg-white/80 dark:bg-darkCard/80 backdrop-blur-md border-b border-gray-200 dark:border-gray-700 transition-colors duration-300 no-print">
+        <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
+            <div class="flex justify-between h-16 items-center">
+                <div class="flex-shrink-0 flex items-center">
+                    <a href="#home" class="font-heading font-bold text-xl tracking-tight text-primary">
+                        AF<span class="text-gray-800 dark:text-white">.CV</span>
+                    </a>
+                </div>
+                
+                <!-- Desktop Menu -->
+                <div class="hidden md:flex items-center space-x-8">
+                    <a href="#about" class="text-sm font-medium hover:text-primary transition-colors">About</a>
+                    <a href="#experience" class="text-sm font-medium hover:text-primary transition-colors">Experience</a>
+                    <a href="#certifications" class="text-sm font-medium hover:text-primary transition-colors">Certifications</a>
+                    <a href="#skills" class="text-sm font-medium hover:text-primary transition-colors">Skills</a>
+                    
+                    <div class="flex items-center space-x-4 border-l border-gray-300 dark:border-gray-600 pl-4">
+                        <button id="theme-toggle" class="p-2 rounded-full hover:bg-gray-200 dark:hover:bg-gray-700 transition-colors" aria-label="Toggle Dark Mode">
+                            <i class="fas fa-moon dark:hidden"></i>
+                            <i class="fas fa-sun hidden dark:block text-yellow-400"></i>
+                        </button>
+                        <button onclick="window.print()" class="bg-primary hover:bg-secondary text-white px-4 py-2 rounded-lg text-sm font-medium transition-all shadow-md hover:shadow-lg flex items-center gap-2">
+                            <i class="fas fa-download"></i> Save PDF
+                        </button>
+                    </div>
+                </div>
+
+                <!-- Mobile Menu Button -->
+                <div class="md:hidden flex items-center space-x-4">
+                    <button id="theme-toggle-mobile" class="p-2 rounded-full hover:bg-gray-200 dark:hover:bg-gray-700 transition-colors">
+                        <i class="fas fa-moon dark:hidden"></i>
+                        <i class="fas fa-sun hidden dark:block text-yellow-400"></i>
+                    </button>
+                    <button id="mobile-menu-btn" class="text-gray-600 dark:text-gray-300 hover:text-primary focus:outline-none">
+                        <i class="fas fa-bars text-2xl"></i>
+                    </button>
+                </div>
+            </div>
+        </div>
+        
+        <!-- Mobile Menu Dropdown -->
+        <div id="mobile-menu" class="hidden md:hidden bg-white dark:bg-darkCard border-b border-gray-200 dark:border-gray-700">
+            <div class="px-2 pt-2 pb-3 space-y-1 sm:px-3">
+                <a href="#about" class="block px-3 py-2 rounded-md text-base font-medium hover:bg-gray-100 dark:hover:bg-gray-800">About</a>
+                <a href="#experience" class="block px-3 py-2 rounded-md text-base font-medium hover:bg-gray-100 dark:hover:bg-gray-800">Experience</a>
+                <a href="#certifications" class="block px-3 py-2 rounded-md text-base font-medium hover:bg-gray-100 dark:hover:bg-gray-800">Certifications</a>
+                <a href="#skills" class="block px-3 py-2 rounded-md text-base font-medium hover:bg-gray-100 dark:hover:bg-gray-800">Skills</a>
+                <button onclick="window.print()" class="w-full text-left block px-3 py-2 text-primary font-medium">
+                    <i class="fas fa-download mr-2"></i> Save PDF
+                </button>
+            </div>
+        </div>
+    </nav>
+
+    <main class="pt-16">
+        <!-- Hero Section -->
+        <section id="home" class="min-h-[85vh] flex items-center relative overflow-hidden">
+            <!-- Background Decoration -->
+            <div class="absolute top-0 left-0 w-full h-full overflow-hidden -z-10 no-print">
+                <div class="absolute -top-40 -right-40 w-96 h-96 bg-primary/10 rounded-full blur-3xl"></div>
+                <div class="absolute top-40 -left-40 w-96 h-96 bg-purple-500/10 rounded-full blur-3xl"></div>
+            </div>
+
+            <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 w-full py-12 md:py-20">
+                <div class="flex flex-col md:flex-row items-center justify-between gap-12">
+                    
+                    <!-- Text Content -->
+                    <div class="w-full md:w-3/5 space-y-6 text-center md:text-left z-10 fade-in-section">
+                        <div class="inline-block px-4 py-1.5 rounded-full bg-primary/10 text-primary font-medium text-sm mb-4 border border-primary/20">
+                            Available for Educational Leadership Roles
+                        </div>
+                        <h1 class="text-4xl md:text-6xl font-heading font-bold text-gray-900 dark:text-white leading-tight">
+                            Hi, I'm <br>
+                            <span class="text-primary">Alaa Fawzy</span>
+                        </h1>
+                        <h2 class="text-xl md:text-2xl text-gray-600 dark:text-gray-300 font-medium h-8 typing-cursor" id="typed-text">
+                            <!-- JS will inject text here -->
+                        </h2>
+                        <p class="text-lg text-gray-600 dark:text-gray-400 max-w-2xl leading-relaxed">
+                            A dedicated ICT Educational Leader and Computer Teacher with over 16 years of expertise in K-12 technology integration, specializing in leveraging AI, instructional design, and emerging tech.
+                        </p>
+                        
+                        <div class="flex flex-col sm:flex-row gap-4 justify-center md:justify-start pt-4">
+                            <a href="#experience" class="px-8 py-3 bg-primary hover:bg-secondary text-white rounded-lg font-medium transition-all shadow-lg shadow-primary/30 no-print text-center">
+                                View Experience
+                            </a>
+                            <a href="#contact-info" class="px-8 py-3 bg-white dark:bg-darkCard border border-gray-200 dark:border-gray-700 hover:border-primary dark:hover:border-primary rounded-lg font-medium transition-all text-center">
+                                Contact Me
+                            </a>
+                        </div>
+                    </div>
+
+                    <!-- Profile Image -->
+                    <div class="w-full md:w-2/5 flex justify-center z-10 fade-in-section" style="transition-delay: 200ms;">
+                        <div class="relative w-64 h-64 md:w-80 md:h-80 rounded-full p-2 border-4 border-white dark:border-darkCard shadow-2xl bg-gradient-to-tr from-primary to-purple-500">
+                            <img src="https://raw.githubusercontent.com/loukafawzy1985-spec/MyCV/main/alaa.jpg" 
+                                 alt="Alaa Fawzy Mahmoud Adam" 
+                                 class="w-full h-full object-cover rounded-full bg-gray-200"
+                                 onerror="this.src='https://placehold.co/400x400/1e40af/ffffff?text=AF'">
+                            
+                            <!-- Floating Badges -->
+                            <div class="absolute -right-4 bottom-10 bg-white dark:bg-darkCard p-3 rounded-xl shadow-lg border border-gray-100 dark:border-gray-700 flex items-center gap-3 animate-bounce" style="animation-duration: 3s;">
+                                <i class="fab fa-google text-blue-500 text-xl"></i>
+                                <span class="text-xs font-bold w-20 leading-tight">Gemini Certified Educator</span>
+                            </div>
+                            <div class="absolute -left-6 top-10 bg-white dark:bg-darkCard p-3 rounded-xl shadow-lg border border-gray-100 dark:border-gray-700 flex items-center gap-3 animate-bounce" style="animation-duration: 4s;">
+                                <i class="fas fa-robot text-purple-500 text-xl"></i>
+                                <span class="text-xs font-bold w-16 leading-tight">AI & EdTech Expert</span>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- Contact Info Bar -->
+                <div id="contact-info" class="mt-16 pt-8 border-t border-gray-200 dark:border-gray-800 flex flex-wrap justify-center gap-8 fade-in-section" style="transition-delay: 400ms;">
+                    <div class="flex items-center gap-3 text-gray-600 dark:text-gray-400">
+                        <div class="w-10 h-10 rounded-full bg-primary/10 flex items-center justify-center text-primary">
+                            <i class="fas fa-envelope"></i>
+                        </div>
+                        <span class="text-sm">Available via LinkedIn/Email</span>
+                    </div>
+                    <div class="flex items-center gap-3 text-gray-600 dark:text-gray-400">
+                        <div class="w-10 h-10 rounded-full bg-primary/10 flex items-center justify-center text-primary">
+                            <i class="fas fa-phone"></i>
+                        </div>
+                        <span class="text-sm">+20 100 680 8425</span>
+                    </div>
+                    <div class="flex items-center gap-3 text-gray-600 dark:text-gray-400">
+                        <div class="w-10 h-10 rounded-full bg-primary/10 flex items-center justify-center text-primary">
+                            <i class="fas fa-map-marker-alt"></i>
+                        </div>
+                        <span class="text-sm">26-Aziz Antwan St., El-Siouf, Alexandria, Egypt</span>
+                    </div>
+                </div>
+            </div>
+        </section>
+
+        <!-- Professional Summary -->
+        <section id="about" class="py-20 bg-white dark:bg-darkCard border-y border-gray-100 dark:border-gray-800">
+            <div class="max-w-4xl mx-auto px-4 sm:px-6 lg:px-8 text-center fade-in-section">
+                <h2 class="text-3xl font-heading font-bold mb-6 flex items-center justify-center gap-3">
+                    <i class="fas fa-user-tie text-primary"></i> Professional Summary
+                </h2>
+                <div class="w-24 h-1 bg-primary mx-auto mb-8 rounded-full"></div>
+                <p class="text-lg text-gray-600 dark:text-gray-300 leading-relaxed text-justify md:text-center">
+                    An experienced and dedicated <strong class="text-gray-900 dark:text-white">ICT Educational Leader and Computer Teacher</strong> with over 16 years of expertise in K-12 technology integration, curriculum delivery, and classroom management. Specialized in leveraging <strong class="text-primary">AI in education</strong>, instructional design, gamification, and emerging educational technologies to create engaging and productive learning environments. Proven track record in leading technology teams and implementing advanced solutions in top educational institutions.
+                </p>
+            </div>
+        </section>
+
+        <!-- Work Experience Timeline -->
+        <section id="experience" class="py-20 max-w-5xl mx-auto px-4 sm:px-6 lg:px-8">
+            <h2 class="text-3xl font-heading font-bold mb-12 text-center flex items-center justify-center gap-3 fade-in-section">
+                <i class="fas fa-briefcase text-primary"></i> Work Experience
+            </h2>
+            
+            <div class="relative border-l-2 border-gray-200 dark:border-gray-700 ml-4 md:ml-0 md:mx-auto">
+                
+                <!-- Experience Item 1 -->
+                <div class="mb-12 relative pl-8 md:pl-0 timeline-item fade-in-section w-full md:w-1/2 md:ml-auto md:pl-10">
+                    <div class="timeline-dot absolute w-4 h-4 bg-gray-300 dark:bg-gray-600 rounded-full -left-[9px] md:-left-[9px] top-1.5 border-2 border-white dark:border-darkBg z-10"></div>
+                    <div class="bg-white dark:bg-darkCard p-6 rounded-xl shadow-sm border border-gray-100 dark:border-gray-700 hover:shadow-md transition-shadow">
+                        <span class="inline-block px-3 py-1 bg-primary/10 text-primary text-xs font-bold rounded-full mb-3">2020 - Present</span>
+                        <h3 class="text-xl font-bold text-gray-900 dark:text-white">ICT Teacher & Team Leader</h3>
+                        <h4 class="text-md text-gray-500 dark:text-gray-400 mb-4 font-medium">Upper Primary Stage | Salah-Aldin International School (SIS)</h4>
+                        <ul class="space-y-2 text-gray-600 dark:text-gray-300 text-sm list-disc pl-4 marker:text-primary">
+                            <li>Lead the ICT team to align curriculum standards and educational technology goals.</li>
+                            <li>Design and deliver interactive computer science curricula, gamified lessons, and technology projects for upper primary students.</li>
+                        </ul>
+                    </div>
+                </div>
+
+                <!-- Experience Item 2 -->
+                <div class="mb-12 relative pl-8 md:pl-0 timeline-item fade-in-section w-full md:w-1/2 md:pr-10 md:text-right">
+                    <div class="timeline-dot absolute w-4 h-4 bg-gray-300 dark:bg-gray-600 rounded-full -left-[9px] md:-right-[9px] md:left-auto top-1.5 border-2 border-white dark:border-darkBg z-10"></div>
+                    <div class="bg-white dark:bg-darkCard p-6 rounded-xl shadow-sm border border-gray-100 dark:border-gray-700 hover:shadow-md transition-shadow">
+                        <span class="inline-block px-3 py-1 bg-primary/10 text-primary text-xs font-bold rounded-full mb-3">2015 - 2020</span>
+                        <h3 class="text-xl font-bold text-gray-900 dark:text-white">Computer Teacher</h3>
+                        <h4 class="text-md text-gray-500 dark:text-gray-400 mb-4 font-medium">(Junior, Middle & Senior) | Egyptian English Language School (EELS)</h4>
+                        <p class="text-gray-600 dark:text-gray-300 text-sm">
+                            Taught Computer Studies across both National and Cambridge Primary Program (CPP) departments, fostering digital literacy and advanced computer skills.
+                        </p>
+                    </div>
+                </div>
+
+                <!-- Experience Item 3 -->
+                <div class="mb-12 relative pl-8 md:pl-0 timeline-item fade-in-section w-full md:w-1/2 md:ml-auto md:pl-10">
+                    <div class="timeline-dot absolute w-4 h-4 bg-gray-300 dark:bg-gray-600 rounded-full -left-[9px] md:-left-[9px] top-1.5 border-2 border-white dark:border-darkBg z-10"></div>
+                    <div class="bg-white dark:bg-darkCard p-6 rounded-xl shadow-sm border border-gray-100 dark:border-gray-700 hover:shadow-md transition-shadow">
+                        <span class="inline-block px-3 py-1 bg-primary/10 text-primary text-xs font-bold rounded-full mb-3">2010 - 2015</span>
+                        <h3 class="text-xl font-bold text-gray-900 dark:text-white">Computer Teacher</h3>
+                        <h4 class="text-md text-gray-500 dark:text-gray-400 mb-4 font-medium">(Elementary, Middle & High School) | Egyptian American School (EAS)</h4>
+                        <p class="text-gray-600 dark:text-gray-300 text-sm">
+                            Instructed IT and computing classes across multiple educational stages, tailoring complex technical concepts for diverse age groups.
+                        </p>
+                    </div>
+                </div>
+
+                <!-- Experience Item 4 -->
+                <div class="mb-12 relative pl-8 md:pl-0 timeline-item fade-in-section w-full md:w-1/2 md:pr-10 md:text-right">
+                    <div class="timeline-dot absolute w-4 h-4 bg-gray-300 dark:bg-gray-600 rounded-full -left-[9px] md:-right-[9px] md:left-auto top-1.5 border-2 border-white dark:border-darkBg z-10"></div>
+                    <div class="bg-white dark:bg-darkCard p-6 rounded-xl shadow-sm border border-gray-100 dark:border-gray-700 hover:shadow-md transition-shadow">
+                        <span class="inline-block px-3 py-1 bg-primary/10 text-primary text-xs font-bold rounded-full mb-3">2010 (4 Months)</span>
+                        <h3 class="text-xl font-bold text-gray-900 dark:text-white">ICDL Instructor</h3>
+                        <h4 class="text-md text-gray-500 dark:text-gray-400 mb-4 font-medium">Noor-IT Center</h4>
+                        <p class="text-gray-600 dark:text-gray-300 text-sm">
+                            Delivered comprehensive training on core computer literacy and Microsoft Office applications to adult learners and students.
+                        </p>
+                    </div>
+                </div>
+
+                <!-- Experience Item 5 -->
+                <div class="relative pl-8 md:pl-0 timeline-item fade-in-section w-full md:w-1/2 md:ml-auto md:pl-10">
+                    <div class="timeline-dot absolute w-4 h-4 bg-gray-300 dark:bg-gray-600 rounded-full -left-[9px] md:-left-[9px] top-1.5 border-2 border-white dark:border-darkBg z-10"></div>
+                    <div class="bg-white dark:bg-darkCard p-6 rounded-xl shadow-sm border border-gray-100 dark:border-gray-700 hover:shadow-md transition-shadow">
+                        <span class="inline-block px-3 py-1 bg-primary/10 text-primary text-xs font-bold rounded-full mb-3">2009 (3 Months)</span>
+                        <h3 class="text-xl font-bold text-gray-900 dark:text-white">IT Department Trainee</h3>
+                        <h4 class="text-md text-gray-500 dark:text-gray-400 mb-4 font-medium">Al Arabia Computer Company</h4>
+                        <p class="text-gray-600 dark:text-gray-300 text-sm">
+                            Gained hands-on experience in technical support, network troubleshooting, and computer maintenance.
+                        </p>
+                    </div>
+                </div>
+                
+                <!-- Central Line specifically for Desktop (absolute center line hack) -->
+                <div class="hidden md:block absolute left-1/2 top-0 bottom-0 w-0 border-l-2 border-gray-200 dark:border-gray-700 transform -translate-x-1/2 z-0"></div>
+            </div>
+        </section>
+
+        <!-- Certifications & AI -->
+        <section id="certifications" class="py-20 bg-white dark:bg-darkCard border-y border-gray-100 dark:border-gray-800 print-break">
+            <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
+                <h2 class="text-3xl font-heading font-bold mb-4 text-center flex items-center justify-center gap-3 fade-in-section">
+                    <i class="fas fa-certificate text-primary"></i> AI, Ed-Tech & Certifications
+                </h2>
+                <p class="text-center text-gray-500 dark:text-gray-400 mb-12 fade-in-section">Committed to continuous learning and the integration of emerging technologies.</p>
+                
+                <div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6">
+                    
+                    <!-- Major Certifications Group -->
+                    <div class="bg-gray-50 dark:bg-darkBg p-6 rounded-2xl border border-gray-200 dark:border-gray-700 fade-in-section col-span-1 md:col-span-2 lg:col-span-3">
+                        <h3 class="text-xl font-bold mb-6 text-gray-900 dark:text-white flex items-center gap-2">
+                            <i class="fas fa-star text-yellow-500"></i> Major Certifications & Specializations
+                        </h3>
+                        <div class="grid grid-cols-1 md:grid-cols-2 gap-4">
+                            <div class="flex items-start gap-4 bg-white dark:bg-darkCard p-4 rounded-xl shadow-sm border-l-4 border-blue-500">
+                                <div class="w-10 h-10 rounded-full bg-blue-100 dark:bg-blue-900/30 flex items-center justify-center text-blue-600 flex-shrink-0">
+                                    <i class="fab fa-google"></i>
+                                </div>
+                                <div>
+                                    <h4 class="font-bold text-gray-900 dark:text-white text-sm">Gemini Certified Educator</h4>
+                                    <p class="text-xs text-gray-500 mt-1">Google for Education (Oct 2025 - Oct 2028)</p>
+                                </div>
+                            </div>
+
+                            <div class="flex items-start gap-4 bg-white dark:bg-darkCard p-4 rounded-xl shadow-sm border-l-4 border-purple-500">
+                                <div class="w-10 h-10 rounded-full bg-purple-100 dark:bg-purple-900/30 flex items-center justify-center text-purple-600 flex-shrink-0">
+                                    <i class="fas fa-brain"></i>
+                                </div>
+                                <div>
+                                    <h4 class="font-bold text-gray-900 dark:text-white text-sm">One Million Prompters Certification</h4>
+                                    <p class="text-xs text-gray-500 mt-1">Prompt Engineering - Dubai Future Foundation (2026)</p>
+                                </div>
+                            </div>
+                            
+                            <div class="flex items-start gap-4 bg-white dark:bg-darkCard p-4 rounded-xl shadow-sm border-l-4 border-red-500">
+                                <div class="w-10 h-10 rounded-full bg-red-100 dark:bg-red-900/30 flex items-center justify-center text-red-600 flex-shrink-0">
+                                    <i class="fab fa-adobe"></i>
+                                </div>
+                                <div>
+                                    <h4 class="font-bold text-gray-900 dark:text-white text-sm">Generative AI for Creatives & Marketing</h4>
+                                    <p class="text-xs text-gray-500 mt-1">6-Month Diploma - Adobe Academy EGY (Aug 2025 - Feb 2026)</p>
+                                </div>
+                            </div>
+
+                            <div class="flex items-start gap-4 bg-white dark:bg-darkCard p-4 rounded-xl shadow-sm border-l-4 border-teal-500">
+                                <div class="w-10 h-10 rounded-full bg-teal-100 dark:bg-teal-900/30 flex items-center justify-center text-teal-600 flex-shrink-0">
+                                    <i class="fas fa-object-group"></i>
+                                </div>
+                                <div>
+                                    <h4 class="font-bold text-gray-900 dark:text-white text-sm">Canva Essentials Certified</h4>
+                                    <p class="text-xs text-gray-500 mt-1">Canva Design School (Oct 2024 | ID: 12cf5a)</p>
+                                </div>
+                            </div>
+                            
+                            <div class="flex items-start gap-4 bg-white dark:bg-darkCard p-4 rounded-xl shadow-sm border-l-4 border-indigo-500 md:col-span-2 lg:col-span-1">
+                                <div class="w-10 h-10 rounded-full bg-indigo-100 dark:bg-indigo-900/30 flex items-center justify-center text-indigo-600 flex-shrink-0">
+                                    <i class="fas fa-chalkboard-teacher"></i>
+                                </div>
+                                <div>
+                                    <h4 class="font-bold text-gray-900 dark:text-white text-sm">Teaching Technology Mastery</h4>
+                                    <p class="text-xs text-gray-500 mt-1">Pioneer Teacher Training Company (Jul - Sep 2024)</p>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+
+                    <!-- AI Workshops -->
+                    <div class="bg-gray-50 dark:bg-darkBg p-6 rounded-2xl border border-gray-200 dark:border-gray-700 fade-in-section col-span-1 md:col-span-2">
+                        <h3 class="text-lg font-bold mb-4 text-gray-900 dark:text-white flex items-center gap-2">
+                            <i class="fas fa-robot text-primary"></i> Specialized AI & EdTech Workshops
+                        </h3>
+                        <ul class="space-y-3 text-sm text-gray-700 dark:text-gray-300">
+                            <li class="flex items-start gap-2"><i class="fas fa-check-circle text-green-500 mt-1 flex-shrink-0"></i> <span><strong>AI Tools in Planning & Content Design</strong> (NotebookLM, Canva, Claude AI) - Skill-to-Hire (Jun 2026)</span></li>
+                            <li class="flex items-start gap-2"><i class="fas fa-check-circle text-green-500 mt-1 flex-shrink-0"></i> <span><strong>Arabian AI Forum</strong> (ملتقى تمكين العربي للذكاء الاصطناعي) - Tamkeen Foundation (Jun 2026)</span></li>
+                            <li class="flex items-start gap-2"><i class="fas fa-check-circle text-green-500 mt-1 flex-shrink-0"></i> <span><strong>AI Revolution & AI Tools Series</strong> - Int. Academy of Secrets Wisdom (2025-2026)</span></li>
+                            <li class="flex items-start gap-2"><i class="fas fa-check-circle text-green-500 mt-1 flex-shrink-0"></i> <span><strong>Innovate with AI</strong> (إبدع بالذكاء الاصطناعي) - Effective Teacher Initiative (Nov 2025)</span></li>
+                            <li class="flex items-start gap-2"><i class="fas fa-check-circle text-green-500 mt-1 flex-shrink-0"></i> <span><strong>Teaching with AI</strong> (Through Students' Eyes) - Al Rehab (Aug 2025)</span></li>
+                            <li class="flex items-start gap-2"><i class="fas fa-check-circle text-green-500 mt-1 flex-shrink-0"></i> <span><strong>AI in Teaching & Learning</strong> - Pharos University (PUA) & TeachOgen (2024)</span></li>
+                            <li class="flex items-start gap-2"><i class="fas fa-check-circle text-green-500 mt-1 flex-shrink-0"></i> <span><strong>ALS AI Hackathon</strong> - The American School of Alexandria (Jun 2024)</span></li>
+                            <li class="flex items-start gap-2"><i class="fas fa-check-circle text-green-500 mt-1 flex-shrink-0"></i> <span><strong>Creating Apps in the Classroom</strong> - Queensland University of Technology</span></li>
+                        </ul>
+                    </div>
+
+                    <!-- Leadership -->
+                    <div class="bg-gray-50 dark:bg-darkBg p-6 rounded-2xl border border-gray-200 dark:border-gray-700 fade-in-section col-span-1">
+                        <h3 class="text-lg font-bold mb-4 text-gray-900 dark:text-white flex items-center gap-2">
+                            <i class="fas fa-users text-orange-500"></i> Classroom Leadership
+                        </h3>
+                        <ul class="space-y-4 text-sm text-gray-700 dark:text-gray-300">
+                            <li class="border-l-2 border-orange-400 pl-3">
+                                <strong class="block text-gray-900 dark:text-white">Interactive Engagement & Creative Thinking</strong>
+                                <span class="text-xs text-gray-500">STEAMIFY Academy (Nov 2025)</span>
+                            </li>
+                            <li class="border-l-2 border-orange-400 pl-3">
+                                <strong class="block text-gray-900 dark:text-white">Hack Your Classroom (Behavior)</strong>
+                                <span class="text-xs text-gray-500">Pioneer Teacher Training (Sep 2025)</span>
+                            </li>
+                            <li class="border-l-2 border-orange-400 pl-3">
+                                <strong class="block text-gray-900 dark:text-white">Classroom Management Workshop</strong>
+                                <span class="text-xs text-gray-500">STEAMIFY Academy (Jan 2024)</span>
+                            </li>
+                        </ul>
+                    </div>
+
+                </div>
+            </div>
+        </section>
+
+        <!-- Skills & Education Section -->
+        <section id="skills" class="py-20 max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 print-break">
+            
+            <div class="grid grid-cols-1 lg:grid-cols-3 gap-10">
+                <!-- Education (Left Column) -->
+                <div class="col-span-1 space-y-10">
+                    <div class="fade-in-section">
+                        <h2 class="text-2xl font-heading font-bold mb-6 flex items-center gap-3 border-b-2 border-gray-200 dark:border-gray-700 pb-3">
+                            <i class="fas fa-graduation-cap text-primary"></i> Education
+                        </h2>
+                        <div class="bg-white dark:bg-darkCard p-6 rounded-xl shadow-sm border border-gray-100 dark:border-gray-800">
+                            <div class="w-12 h-12 bg-primary/10 rounded-full flex items-center justify-center text-primary mb-4">
+                                <i class="fas fa-university text-xl"></i>
+                            </div>
+                            <h3 class="font-bold text-lg text-gray-900 dark:text-white">Bachelor of Education</h3>
+                            <p class="text-gray-600 dark:text-gray-400 text-sm mb-2">Alexandria University (May 2005)</p>
+                            <ul class="text-sm text-gray-700 dark:text-gray-300 space-y-1 mt-4">
+                                <li><span class="font-medium text-gray-900 dark:text-white">Specialization:</span> Biology</li>
+                                <li><span class="font-medium text-gray-900 dark:text-white">Grade:</span> Good</li>
+                            </ul>
+                        </div>
+                    </div>
+
+                    <div class="fade-in-section">
+                        <h2 class="text-2xl font-heading font-bold mb-6 flex items-center gap-3 border-b-2 border-gray-200 dark:border-gray-700 pb-3">
+                            <i class="fas fa-language text-primary"></i> Languages
+                        </h2>
+                        <div class="space-y-4 bg-white dark:bg-darkCard p-6 rounded-xl border border-gray-100 dark:border-gray-800">
+                            <div>
+                                <div class="flex justify-between mb-1">
+                                    <span class="text-sm font-medium text-gray-700 dark:text-gray-300">Arabic</span>
+                                    <span class="text-sm text-primary font-bold">Native</span>
+                                </div>
+                                <div class="w-full bg-gray-200 rounded-full h-2 dark:bg-gray-700">
+                                    <div class="bg-primary h-2 rounded-full" style="width: 100%"></div>
+                                </div>
+                            </div>
+                            <div>
+                                <div class="flex justify-between mb-1">
+                                    <span class="text-sm font-medium text-gray-700 dark:text-gray-300">English (B2)</span>
+                                    <span class="text-sm text-primary font-bold">Upper-Intermediate</span>
+                                </div>
+                                <div class="w-full bg-gray-200 rounded-full h-2 dark:bg-gray-700">
+                                    <div class="bg-primary h-2 rounded-full" style="width: 75%"></div>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- Skills (Right Columns) -->
+                <div class="col-span-1 lg:col-span-2 space-y-10">
+                    <div class="fade-in-section">
+                        <h2 class="text-2xl font-heading font-bold mb-6 flex items-center gap-3 border-b-2 border-gray-200 dark:border-gray-700 pb-3">
+                            <i class="fas fa-code text-primary"></i> Technical & AI Tools
+                        </h2>
+                        
+                        <div class="space-y-6">
+                            <div>
+                                <h4 class="text-sm font-bold text-gray-500 uppercase tracking-wider mb-3">Programming & Web</h4>
+                                <div class="flex flex-wrap gap-2">
+                                    <span class="skill-pill px-4 py-2 bg-white dark:bg-darkCard border border-gray-200 dark:border-gray-700 rounded-full text-sm font-medium cursor-default"><i class="fab fa-html5 text-orange-500 mr-1"></i> HTML</span>
+                                    <span class="skill-pill px-4 py-2 bg-white dark:bg-darkCard border border-gray-200 dark:border-gray-700 rounded-full text-sm font-medium cursor-default"><i class="fas fa-database text-gray-500 mr-1"></i> Database Concepts</span>
+                                    <span class="skill-pill px-4 py-2 bg-white dark:bg-darkCard border border-gray-200 dark:border-gray-700 rounded-full text-sm font-medium cursor-default"><i class="fas fa-code text-blue-500 mr-1"></i> VB.Net</span>
+                                    <span class="skill-pill px-4 py-2 bg-white dark:bg-darkCard border border-gray-200 dark:border-gray-700 rounded-full text-sm font-medium cursor-default">MCP</span>
+                                    <span class="skill-pill px-4 py-2 bg-white dark:bg-darkCard border border-gray-200 dark:border-gray-700 rounded-full text-sm font-medium cursor-default">MCAD</span>
+                                    <span class="skill-pill px-4 py-2 bg-white dark:bg-darkCard border border-gray-200 dark:border-gray-700 rounded-full text-sm font-medium cursor-default">MCSD</span>
+                                    <span class="skill-pill px-4 py-2 bg-white dark:bg-darkCard border border-gray-200 dark:border-gray-700 rounded-full text-sm font-medium cursor-default">ICDL</span>
+                                </div>
+                            </div>
+                            
+                            <div>
+                                <h4 class="text-sm font-bold text-gray-500 uppercase tracking-wider mb-3">Creative, EdTech & AI</h4>
+                                <div class="flex flex-wrap gap-2">
+                                    <span class="skill-pill px-4 py-2 bg-primary/10 text-primary border border-primary/30 rounded-full text-sm font-medium cursor-default">Claude AI</span>
+                                    <span class="skill-pill px-4 py-2 bg-primary/10 text-primary border border-primary/30 rounded-full text-sm font-medium cursor-default">NotebookLM</span>
+                                    <span class="skill-pill px-4 py-2 bg-primary/10 text-primary border border-primary/30 rounded-full text-sm font-medium cursor-default">Gemini</span>
+                                    <span class="skill-pill px-4 py-2 bg-purple-500/10 text-purple-600 dark:text-purple-400 border border-purple-500/30 rounded-full text-sm font-medium cursor-default">Canva</span>
+                                    <span class="skill-pill px-4 py-2 bg-white dark:bg-darkCard border border-gray-200 dark:border-gray-700 rounded-full text-sm font-medium cursor-default">CapCut</span>
+                                    <span class="skill-pill px-4 py-2 bg-white dark:bg-darkCard border border-gray-200 dark:border-gray-700 rounded-full text-sm font-medium cursor-default">Adobe Photoshop</span>
+                                    <span class="skill-pill px-4 py-2 bg-white dark:bg-darkCard border border-gray-200 dark:border-gray-700 rounded-full text-sm font-medium cursor-default">Wordwall</span>
+                                    <span class="skill-pill px-4 py-2 bg-white dark:bg-darkCard border border-gray-200 dark:border-gray-700 rounded-full text-sm font-medium cursor-default">Kahoot</span>
+                                    <span class="skill-pill px-4 py-2 bg-white dark:bg-darkCard border border-gray-200 dark:border-gray-700 rounded-full text-sm font-medium cursor-default">ElevenLabs</span>
+                                    <span class="skill-pill px-4 py-2 bg-white dark:bg-darkCard border border-gray-200 dark:border-gray-700 rounded-full text-sm font-medium cursor-default">Renderforest</span>
+                                    <span class="skill-pill px-4 py-2 bg-white dark:bg-darkCard border border-gray-200 dark:border-gray-700 rounded-full text-sm font-medium cursor-default">Classroomscreen</span>
+                                    <span class="skill-pill px-4 py-2 bg-white dark:bg-darkCard border border-gray-200 dark:border-gray-700 rounded-full text-sm font-medium cursor-default">Microsoft Visio</span>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+
+                    <div class="fade-in-section">
+                        <h2 class="text-2xl font-heading font-bold mb-6 flex items-center gap-3 border-b-2 border-gray-200 dark:border-gray-700 pb-3">
+                            <i class="fas fa-hands-helping text-primary"></i> Professional & Soft Skills
+                        </h2>
+                        
+                        <div class="grid grid-cols-1 md:grid-cols-2 gap-4">
+                            <!-- Professional Teaching -->
+                            <div class="bg-white dark:bg-darkCard p-4 rounded-xl border border-gray-100 dark:border-gray-800">
+                                <h4 class="font-bold text-gray-900 dark:text-white mb-2"><i class="fas fa-chalkboard text-gray-400 mr-2"></i> Professional Teaching</h4>
+                                <p class="text-sm text-gray-600 dark:text-gray-400">Lesson Plan Management, Assessment for Learning (PSGN).</p>
+                            </div>
+                            
+                            <!-- Classroom Interaction -->
+                            <div class="bg-white dark:bg-darkCard p-4 rounded-xl border border-gray-100 dark:border-gray-800">
+                                <h4 class="font-bold text-gray-900 dark:text-white mb-2"><i class="fas fa-users text-gray-400 mr-2"></i> Classroom Interaction</h4>
+                                <p class="text-sm text-gray-600 dark:text-gray-400">Thinking Skills, Student Motivation, SEN/ADHD Engagement, Reflective Teaching.</p>
+                            </div>
+
+                            <!-- Soft skills list -->
+                            <div class="md:col-span-2 mt-2">
+                                <ul class="flex flex-wrap gap-3">
+                                    <li class="flex items-center text-sm text-gray-700 dark:text-gray-300 bg-gray-100 dark:bg-gray-800 px-3 py-1.5 rounded-md"><i class="fas fa-check text-green-500 mr-2"></i> Time Management & Working Under Pressure</li>
+                                    <li class="flex items-center text-sm text-gray-700 dark:text-gray-300 bg-gray-100 dark:bg-gray-800 px-3 py-1.5 rounded-md"><i class="fas fa-check text-green-500 mr-2"></i> Team Collaboration & Active Leadership</li>
+                                    <li class="flex items-center text-sm text-gray-700 dark:text-gray-300 bg-gray-100 dark:bg-gray-800 px-3 py-1.5 rounded-md"><i class="fas fa-check text-green-500 mr-2"></i> Professional Communication & Strategic Problem-Solving</li>
+                                </ul>
+                            </div>
+                        </div>
+                    </div>
+
+                </div>
+            </div>
+        </section>
+    </main>
+
+    <footer class="bg-white dark:bg-darkCard border-t border-gray-200 dark:border-gray-800 py-8 mt-12 no-print">
+        <div class="max-w-7xl mx-auto px-4 text-center">
+            <h2 class="text-xl font-heading font-bold text-gray-900 dark:text-white mb-4">Alaa Fawzy Mahmoud Adam</h2>
+            <div class="flex justify-center space-x-6 mb-6">
+                <a href="#" class="text-gray-400 hover:text-primary transition-colors text-2xl"><i class="fab fa-linkedin"></i></a>
+                <a href="mailto:someone@example.com" class="text-gray-400 hover:text-primary transition-colors text-2xl"><i class="fas fa-envelope"></i></a>
+            </div>
+            <p class="text-gray-500 text-sm">&copy; <span id="current-year"></span> Interactive CV created for Alaa Fawzy. All rights reserved.</p>
+        </div>
+    </footer>
+
+    <script>
+        
+        // 1. Set current year in footer
+        document.getElementById('current-year').textContent = new Date().getFullYear();
+
+        // 2. Dark Mode Toggle Logic
+        const themeToggles = [document.getElementById('theme-toggle'), document.getElementById('theme-toggle-mobile')];
+        
+        // Check for saved theme preference or use system preference
+        if (localStorage.getItem('color-theme') === 'dark' || (!('color-theme' in localStorage) && window.matchMedia('(prefers-color-scheme: dark)').matches)) {
+            document.documentElement.classList.add('dark');
+        } else {
+            document.documentElement.classList.remove('dark');
+        }
+
+        themeToggles.forEach(toggle => {
+            if(toggle) {
+                toggle.addEventListener('click', function() {
+                    if (document.documentElement.classList.contains('dark')) {
+                        document.documentElement.classList.remove('dark');
+                        localStorage.setItem('color-theme', 'light');
+                    } else {
+                        document.documentElement.classList.add('dark');
+                        localStorage.setItem('color-theme', 'dark');
+                    }
+                });
+            }
+        });
+
+        // 3. Mobile Menu Toggle
+        const mobileBtn = document.getElementById('mobile-menu-btn');
+        const mobileMenu = document.getElementById('mobile-menu');
+        
+        if (mobileBtn && mobileMenu) {
+            mobileBtn.addEventListener('click', () => {
+                mobileMenu.classList.toggle('hidden');
+            });
+            
+            // Close mobile menu on link click
+            mobileMenu.querySelectorAll('a').forEach(link => {
+                link.addEventListener('click', () => {
+                    mobileMenu.classList.add('hidden');
+                });
+            });
+        }
+
+        // 4. Scroll Animation (Intersection Observer)
+        const observerOptions = {
+            root: null,
+            rootMargin: '0px',
+            threshold: 0.1
+        };
+
+        const observer = new IntersectionObserver((entries, observer) => {
+            entries.forEach(entry => {
+                if (entry.isIntersecting) {
+                    entry.target.classList.add('is-visible');
+                    observer.unobserve(entry.target); // Optional: animate only once
+                }
+            });
+        }, observerOptions);
+
+        document.querySelectorAll('.fade-in-section').forEach((section) => {
+            observer.observe(section);
+        });
+
+        // 5. Typing Effect for Header
+        const typedTextElement = document.getElementById('typed-text');
+        const phrases = [
+            "ICT Educational Leader", 
+            "AI Integration Specialist", 
+            "EdTech Enthusiast", 
+            "Computer Teacher"
+        ];
+        
+        let phraseIndex = 0;
+        let charIndex = 0;
+        let isDeleting = false;
+        let typingSpeed = 100;
+
+        function typeEffect() {
+            const currentPhrase = phrases[phraseIndex];
+            
+            if (isDeleting) {
+                typedTextElement.textContent = currentPhrase.substring(0, charIndex - 1);
+                charIndex--;
+                typingSpeed = 50;
+            } else {
+                typedTextElement.textContent = currentPhrase.substring(0, charIndex + 1);
+                charIndex++;
+                typingSpeed = 100;
+            }
+
+            if (!isDeleting && charIndex === currentPhrase.length) {
+                isDeleting = true;
+                typingSpeed = 1500; // Pause at end of word
+            } else if (isDeleting && charIndex === 0) {
+                isDeleting = false;
+                phraseIndex = (phraseIndex + 1) % phrases.length;
+                typingSpeed = 500; // Pause before new word
+            }
+
+            setTimeout(typeEffect, typingSpeed);
+        }
+
+        // Start typing effect after a short delay
+        setTimeout(typeEffect, 1000);
+    </script>
+</body>
+</html>
